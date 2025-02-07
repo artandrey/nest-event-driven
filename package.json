@@ -1,0 +1,54 @@
+{
+  "name": "",
+  "version": "0.0.0",
+  "description": "Starter for building npm package",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "start:dev": "tsc --watch",
+    "test:dev": "vitest",
+    "test": "vitest run",
+    "lint": "eslint --fix",
+    "format": "prettier --write .",
+    "prepare": "husky",
+    "pre-commit": "lint-staged",
+    "build": "tsup",
+    "release": "changeset publish"
+  },
+  "lint-staged": {
+    "**/*.{js,mjs,cjs,ts}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add -p"
+    ],
+    "**/*.{ts,tsx}": "tsc-files --noEmit"
+  },
+  "keywords": [],
+  "author": "Andrii Artemenko",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/.../.git"
+  },
+  "bugs": {
+    "url": "https://github.com/.../issues"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "eslint": "^9.19.0",
+    "globals": "^15.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2",
+    "@types/node": "^22.13.0",
+    "@changesets/cli": "^2.27.12",
+    "unplugin-swc": "^1.5.1",
+    "tsc-files": "^1.1.4",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0",
+    "vitest": "^3.0.4",
+    "tsup": "^8.3.6"
+  }
+}
