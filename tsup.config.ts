@@ -1,13 +1,16 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  entry: ['src/lib/index.ts'],
-  splitting: false,
+  entry: {
+    'dist/core/index': './packages/core/lib/index.ts',
+  },
+  splitting: true,
   sourcemap: true,
-  clean: true,
+  clean: false,
   minify: true,
   dts: true,
-  outDir: 'dist',
+
+  outDir: 'packages',
   format: ['esm', 'cjs'],
   tsconfig: 'tsconfig.prod.json',
 });

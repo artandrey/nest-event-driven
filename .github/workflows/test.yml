@@ -13,4 +13,4 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - name: Test
-        run: pnpm run test
+        run: pnpm run test:e2e

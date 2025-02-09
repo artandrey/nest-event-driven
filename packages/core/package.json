@@ -1,0 +1,17 @@
+{
+  "name": "@nestjs-event-driven/core",
+  "version": "0.0.0",
+  "private": false,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.8",
+    "@nestjs/core": "^11.0.8",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  }
+}
