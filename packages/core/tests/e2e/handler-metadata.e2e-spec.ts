@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
-import { EventBus, EventDrivenModule, IEvent, IEventHandler } from 'packages/core/lib';
+import { EventDrivenCore, EventDrivenModule, IEvent, IEventHandler, IHandlerRegister } from 'packages/core/lib';
 import { EventHandler } from 'packages/core/lib/decorators/event-handler.decorator';
 import { describe, expect, it } from 'vitest';
 
-describe('Event Bus Handler Metadata', () => {
+describe('Handler Register Metadata', () => {
   it('should return handler metadata', async () => {
     class TestEvent implements IEvent<object> {
       constructor(public readonly payload: object) {}
@@ -21,9 +21,9 @@ describe('Event Bus Handler Metadata', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get(EventBus);
+    const handlerRegister = testingModule.get<IHandlerRegister>(EventDrivenCore.HANDLER_REGISTER);
 
-    const handlerSignatures = eventBus.getHandlerSignatures();
+    const handlerSignatures = handlerRegister.getHandlerSignatures();
 
     expect(handlerSignatures).toEqual([{ event: TestEvent, metadata: { test: 'test' } }]);
   });

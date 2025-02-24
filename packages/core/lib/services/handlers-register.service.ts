@@ -3,10 +3,11 @@ import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 
 import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
 import { EventOption } from '../interfaces/event-handler.interface';
+import { IHandlerRegister } from '../interfaces/handler-register.interface';
 import { IEventHandlerSignature } from '../interfaces/handler-signature.interface';
 
 @Injectable()
-export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> {
+export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHandlerRegister<T, TypeT> {
   private handlers = new Map<string, Set<T>>();
   private scopedHandlers = new Map<string, Set<TypeT>>();
   private handlersSignatures: IEventHandlerSignature[] = [];

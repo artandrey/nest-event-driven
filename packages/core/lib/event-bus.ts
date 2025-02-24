@@ -10,7 +10,6 @@ import { IEventHandler } from './interfaces/event-handler.interface';
 import { IEventPublisher } from './interfaces/event-publisher.interface';
 import { IEvent } from './interfaces/event.interface';
 import { IHandlerCallOptions } from './interfaces/handler-call-options.interface';
-import { IEventHandlerSignature } from './interfaces/handler-signature.interface';
 import { HandlerRegister } from './services/handlers-register.service';
 import { ObservableBus } from './utils/observable-bus';
 
@@ -78,10 +77,6 @@ export class EventBus<TEvent extends IEvent = IEvent>
 
   public register(handlers: EventHandlerType<TEvent>[] = []) {
     handlers.forEach((handler) => this.registerHandler(handler));
-  }
-
-  public getHandlerSignatures(): Readonly<IEventHandlerSignature[]> {
-    return this.handlersRegister.getHandlerSignatures();
   }
 
   async synchronouslyConsumeByStrictlySingleHandler(event: TEvent, options?: IHandlerCallOptions): Promise<void> {
