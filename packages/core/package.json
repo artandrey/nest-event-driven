@@ -3,15 +3,16 @@
   "version": "0.0.0",
   "private": false,
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "@nestjs/common": "^11.0.8",
-    "@nestjs/core": "^11.0.8",
-    "reflect-metadata": "^0.2.2",
+    "@nestjs/common": "^10.0.0 || ^11.0.0",
+    "@nestjs/core": "^10.0.0 || ^11.0.0",
+    "reflect-metadata": "^0.1.13 || ^0.2.0",
     "rxjs": "^7.8.1"
   }
 }
