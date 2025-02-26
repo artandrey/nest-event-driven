@@ -1,6 +1,6 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
-import { IEvent, IEventHandler, IHandlerRegister } from '../core';
+import { IHandlerRegister } from '../core';
 import { EventBus } from '../core/services/event-bus';
 import { EventDrivenCore } from './constants';
 import { ExplorerService } from './services/explorer.service';
@@ -17,8 +17,7 @@ import { NestJsHandlerRegister } from './services/nest-js-handler-register.servi
     HandlerRegistrar,
     {
       provide: EventDrivenCore.EVENT_BUS,
-      useFactory: (handlerRegister: IHandlerRegister<IEventHandler<IEvent<object>, void>>) =>
-        new EventBus(handlerRegister),
+      useFactory: (handlerRegister: IHandlerRegister) => new EventBus(handlerRegister),
       inject: [EventDrivenCore.HANDLER_REGISTER],
     },
   ],

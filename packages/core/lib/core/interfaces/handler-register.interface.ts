@@ -1,5 +1,7 @@
 import { Type } from '@nestjs/common';
 
+import { IEventHandler } from './event-handler.interface';
+import { IEvent } from './event.interface';
 import { IEventHandlerSignature } from './handler-signature.interface';
 
 /**
@@ -8,7 +10,7 @@ import { IEventHandlerSignature } from './handler-signature.interface';
  * @template T The handler type
  * @template TypeT The handler class type
  */
-export interface IHandlerRegister<T = unknown, TypeT extends Type<T> = Type<T>> {
+export interface IHandlerRegister<T = IEventHandler<IEvent>, TypeT extends Type<T> = Type<T>> {
   /**
    * Adds a handler to the handlers map
    * @param handlerKey The key to store the handler under
