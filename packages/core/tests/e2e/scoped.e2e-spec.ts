@@ -2,9 +2,16 @@ import { Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { describe } from 'node:test';
-import { EventBus, EventDrivenModule, EventHandler, EventHandlerScope, IEvent, IEventHandler } from 'packages/core/lib';
-import { expect, vi } from 'vitest';
-import { it } from 'vitest';
+import {
+  EventDrivenCore,
+  EventDrivenModule,
+  EventHandler,
+  EventHandlerScope,
+  IEvent,
+  IEventBus,
+  IEventHandler,
+} from 'packages/core/lib';
+import { expect, it, vi } from 'vitest';
 
 class TestEvent implements IEvent<object> {
   constructor(public readonly payload: object) {}
@@ -30,7 +37,7 @@ describe('Scoped', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get(EventBus);
+    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
 
     const contextA = { a: 1 };
     const contextB = { b: 2 };

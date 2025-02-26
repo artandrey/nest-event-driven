@@ -1,17 +1,18 @@
-import { Injectable, Type } from '@nestjs/common';
+import { Inject, Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-import { IEvent, IEventHandler } from '../../core/interfaces';
+import { IEvent, IEventHandler, IHandlerRegister } from '../../core/interfaces';
 import { EventOption } from '../../core/interfaces/event-handler.interface';
 import { IEventHandlerSignature } from '../../core/interfaces/handler-signature.interface';
-import { BaseHandlerRegister } from '../../core/services/base-handlers-register.service';
+import { EventDrivenCore } from '../constants';
 import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
 
 @Injectable()
 export class HandlerRegistrar<TEvent extends IEvent = IEvent> {
   constructor(
     private readonly moduleRef: ModuleRef,
-    private readonly handlerRegister: BaseHandlerRegister<IEventHandler<TEvent>>,
+    @Inject(EventDrivenCore.HANDLER_REGISTER)
+    private readonly handlerRegister: IHandlerRegister<IEventHandler<TEvent>>,
   ) {}
 
   /**

@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { EventBus, EventDrivenModule, EventHandler, IEvent, IEventHandler } from 'packages/core/lib';
+import { IEventBus } from 'packages/core/dist';
+import { EventDrivenCore, EventDrivenModule, EventHandler, IEvent, IEventHandler } from 'packages/core/lib';
 import { describe, expect, it, vi } from 'vitest';
 
 class TestEvent implements IEvent<object> {
@@ -21,7 +22,7 @@ describe('Global', () => {
     }).compile();
     await testingModule.init();
 
-    const eventBus = testingModule.get(EventBus);
+    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
 
     await eventBus.synchronouslyConsumeByStrictlySingleHandler(new TestEvent({}));
 
@@ -46,7 +47,7 @@ describe('Global', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get(EventBus);
+    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
 
     await expect(eventBus.synchronouslyConsumeByStrictlySingleHandler(new TestEvent({}))).rejects.toThrow();
   });
@@ -72,7 +73,7 @@ describe('Global', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get(EventBus);
+    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
 
     await eventBus.synchronouslyConsumeByMultipleHandlers(new TestEvent({}));
 

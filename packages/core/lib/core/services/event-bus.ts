@@ -2,10 +2,8 @@ import { Injectable, OnModuleDestroy, Type } from '@nestjs/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { BaseHandlerRegister } from '.';
-import { IEvent, IEventBus, IEventHandler, IEventPublisher } from '..';
+import { IEvent, IEventBus, IEventHandler, IEventPublisher, IHandlerRegister } from '..';
 import { EVENTS_HANDLER_METADATA } from '../../nest/decorators/constants';
-import { HandlerRegistrar } from '../../nest/services';
 import { HandlerNotFoundException, MultipleHandlersFoundException, PublisherNotSetException } from '../exceptions';
 import { defaultGetEventName } from '../helpers/default-get-event-name';
 import { IHandlerCallOptions } from '../interfaces/handler-call-options.interface';
@@ -22,10 +20,7 @@ export class EventBus<TEvent extends IEvent = IEvent>
 
   protected _pubsub: IEventPublisher | null = null;
 
-  constructor(
-    private readonly handlersRegister: BaseHandlerRegister<IEventHandler<TEvent>>,
-    private readonly handlerRegistrar: HandlerRegistrar<TEvent>,
-  ) {
+  constructor(private readonly handlersRegister: IHandlerRegister<IEventHandler<TEvent>>) {
     super();
     this.subscriptions = [];
   }
@@ -76,10 +71,6 @@ export class EventBus<TEvent extends IEvent = IEvent>
     this.subscriptions.push(subscription);
   }
 
-  public register(handlers: EventHandlerType<TEvent>[] = []) {
-    this.handlerRegistrar.register(handlers);
-  }
-
   async synchronouslyConsumeByStrictlySingleHandler(event: TEvent, options?: IHandlerCallOptions): Promise<void> {
     const handlers = await this.handlersRegister.get(event, options?.context);
 
@@ -98,10 +89,6 @@ export class EventBus<TEvent extends IEvent = IEvent>
       throw new HandlerNotFoundException();
     }
     return handlers.forEach((handler) => handler.handle(event));
-  }
-
-  protected registerHandler(handler: EventHandlerType<TEvent>) {
-    return this.handlerRegistrar.register([handler]);
   }
 
   protected ofEventName(name: string) {
