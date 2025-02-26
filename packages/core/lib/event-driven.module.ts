@@ -2,17 +2,21 @@ import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
 import { EventDrivenCore } from './constants';
 import { EventBus } from './event-bus';
+import { BaseHandlerRegister } from './services/base-handlers-register.service';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
-import { HandlerRegister } from './services/handlers-register.service';
+import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
 
 @Module({
   providers: [
     ExplorerService,
-    HandlerRegister,
+    {
+      provide: BaseHandlerRegister,
+      useClass: NestJsHandlerRegister,
+    },
     {
       provide: EventDrivenCore.HANDLER_REGISTER,
-      useExisting: HandlerRegister,
+      useExisting: BaseHandlerRegister,
     },
     HandlerRegistrar,
     EventBus,
@@ -21,7 +25,13 @@ import { HandlerRegister } from './services/handlers-register.service';
       useExisting: EventBus,
     },
   ],
-  exports: [EventBus, HandlerRegister, HandlerRegistrar, EventDrivenCore.EVENT_BUS, EventDrivenCore.HANDLER_REGISTER],
+  exports: [
+    EventBus,
+    BaseHandlerRegister,
+    HandlerRegistrar,
+    EventDrivenCore.EVENT_BUS,
+    EventDrivenCore.HANDLER_REGISTER,
+  ],
 })
 export class EventDrivenModule implements OnApplicationBootstrap {
   constructor(

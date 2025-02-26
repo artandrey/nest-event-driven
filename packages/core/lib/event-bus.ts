@@ -10,8 +10,8 @@ import { IEventHandler } from './interfaces/event-handler.interface';
 import { IEventPublisher } from './interfaces/event-publisher.interface';
 import { IEvent } from './interfaces/event.interface';
 import { IHandlerCallOptions } from './interfaces/handler-call-options.interface';
+import { BaseHandlerRegister } from './services/base-handlers-register.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
-import { HandlerRegister } from './services/handlers-register.service';
 import { ObservableBus } from './utils/observable-bus';
 
 export type EventHandlerType<TEvent extends IEvent = IEvent> = Type<IEventHandler<TEvent>>;
@@ -26,7 +26,7 @@ export class EventBus<TEvent extends IEvent = IEvent>
   protected _pubsub: IEventPublisher | null = null;
 
   constructor(
-    private readonly handlersRegister: HandlerRegister<IEventHandler<TEvent>>,
+    private readonly handlersRegister: BaseHandlerRegister<IEventHandler<TEvent>>,
     private readonly handlerRegistrar: HandlerRegistrar<TEvent>,
   ) {
     super();

@@ -5,13 +5,13 @@ import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
 import { IEvent, IEventHandler } from '../interfaces';
 import { EventOption } from '../interfaces/event-handler.interface';
 import { IEventHandlerSignature } from '../interfaces/handler-signature.interface';
-import { HandlerRegister } from './handlers-register.service';
+import { BaseHandlerRegister } from './base-handlers-register.service';
 
 @Injectable()
 export class HandlerRegistrar<TEvent extends IEvent = IEvent> {
   constructor(
     private readonly moduleRef: ModuleRef,
-    private readonly handlerRegister: HandlerRegister<IEventHandler<TEvent>>,
+    private readonly handlerRegister: BaseHandlerRegister<IEventHandler<TEvent>>,
   ) {}
 
   /**

@@ -1,17 +1,14 @@
 import { Injectable, Type } from '@nestjs/common';
-import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 
 import { EventOption } from '../interfaces/event-handler.interface';
 import { IHandlerRegister } from '../interfaces/handler-register.interface';
 import { IEventHandlerSignature } from '../interfaces/handler-signature.interface';
 
 @Injectable()
-export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHandlerRegister<T, TypeT> {
+export class BaseHandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHandlerRegister<T, TypeT> {
   private handlers = new Map<string, Set<T>>();
   private scopedHandlers = new Map<string, Set<TypeT>>();
   private handlersSignatures: IEventHandlerSignature[] = [];
-
-  constructor(private moduleRef: ModuleRef) {}
 
   // Add handler to the handlers map
   addHandler(handlerKey: string, instance: T): void {
@@ -35,20 +32,26 @@ export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHan
     const handlerKey = this.buildHandlerKey(eventName);
     const singletonHandlers = [...(this.handlers.get(handlerKey) ?? [])];
 
-    const contextId = ContextIdFactory.create();
-    this.moduleRef.registerRequestByContextId(context, contextId);
     const handlerTypes = this.scopedHandlers.get(handlerKey);
-
     if (!handlerTypes) return singletonHandlers;
-    const scopedHandlers = await Promise.all(
-      [...handlerTypes.values()].map((handlerType) =>
-        this.moduleRef.resolve(handlerType, contextId, {
-          strict: false,
-        }),
-      ),
-    );
 
+    const scopedHandlers = await this.getScopedHandlers(handlerTypes, context);
     return [...singletonHandlers, ...scopedHandlers];
+  }
+
+  /**
+   * Gets scoped handler instances with the provided context
+   * This method should be overridden by subclasses to provide specific context handling
+   * @param handlerTypes Set of handler types to resolve
+   * @param context Optional context for scoped handlers
+   * @returns A promise that resolves to an array of handler instances
+   */
+  protected async getScopedHandlers(handlerTypes: Set<TypeT>, context?: object): Promise<T[]> {
+    const instances: T[] = [];
+    handlerTypes.forEach((handlerType) => {
+      instances.push(new handlerType(context));
+    });
+    return instances;
   }
 
   getName<E>(event: E): string {
