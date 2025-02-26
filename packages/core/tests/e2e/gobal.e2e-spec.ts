@@ -1,7 +1,6 @@
 import { Test } from '@nestjs/testing';
+import { EventBus, EventDrivenModule, EventHandler, IEvent, IEventHandler } from 'packages/core/lib';
 import { describe, expect, it, vi } from 'vitest';
-
-import { EventBus, EventDrivenModule, EventHandler, IEvent, IEventHandler } from '../../lib';
 
 class TestEvent implements IEvent<object> {
   constructor(public readonly payload: object) {}

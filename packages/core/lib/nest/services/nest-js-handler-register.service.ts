@@ -1,7 +1,7 @@
 import { Injectable, Type } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 
-import { BaseHandlerRegister } from './base-handlers-register.service';
+import { BaseHandlerRegister } from '../../core/services/base-handlers-register.service';
 
 @Injectable()
 export class NestJsHandlerRegister<T, TypeT extends Type<T> = Type<T>> extends BaseHandlerRegister<T, TypeT> {

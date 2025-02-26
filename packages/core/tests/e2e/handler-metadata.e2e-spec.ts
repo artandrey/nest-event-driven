@@ -1,6 +1,12 @@
 import { Test } from '@nestjs/testing';
-import { EventDrivenCore, EventDrivenModule, IEvent, IEventHandler, IHandlerRegister } from 'packages/core/lib';
-import { EventHandler } from 'packages/core/lib/decorators/event-handler.decorator';
+import {
+  EventDrivenCore,
+  EventDrivenModule,
+  EventHandler,
+  IEvent,
+  IEventHandler,
+  IHandlerRegister,
+} from 'packages/core/lib';
 import { describe, expect, it } from 'vitest';
 
 describe('Handler Register Metadata', () => {

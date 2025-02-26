@@ -2,17 +2,14 @@ import { Injectable, OnModuleDestroy, Type } from '@nestjs/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { EVENTS_HANDLER_METADATA } from './decorators/constants';
-import { HandlerNotFoundException, MultipleHandlersFoundException, PublisherNotSetException } from './exceptions';
-import { defaultGetEventName } from './helpers/default-get-event-name';
-import { IEventBus } from './interfaces/event-bus.interface';
-import { IEventHandler } from './interfaces/event-handler.interface';
-import { IEventPublisher } from './interfaces/event-publisher.interface';
-import { IEvent } from './interfaces/event.interface';
-import { IHandlerCallOptions } from './interfaces/handler-call-options.interface';
-import { BaseHandlerRegister } from './services/base-handlers-register.service';
-import { HandlerRegistrar } from './services/handler-registrar.service';
-import { ObservableBus } from './utils/observable-bus';
+import { BaseHandlerRegister } from '.';
+import { IEvent, IEventBus, IEventHandler, IEventPublisher } from '..';
+import { EVENTS_HANDLER_METADATA } from '../../nest/decorators/constants';
+import { HandlerRegistrar } from '../../nest/services';
+import { HandlerNotFoundException, MultipleHandlersFoundException, PublisherNotSetException } from '../exceptions';
+import { defaultGetEventName } from '../helpers/default-get-event-name';
+import { IHandlerCallOptions } from '../interfaces/handler-call-options.interface';
+import { ObservableBus } from '../utils/observable-bus';
 
 export type EventHandlerType<TEvent extends IEvent = IEvent> = Type<IEventHandler<TEvent>>;
 

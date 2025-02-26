@@ -3,8 +3,8 @@ import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { Module } from '@nestjs/core/injector/module';
 import { ModulesContainer } from '@nestjs/core/injector/modules-container';
 
+import { IEvent, IEventHandler } from '../../core/interfaces';
 import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
-import { IEvent, IEventHandler } from '../interfaces';
 
 @Injectable()
 export class ExplorerService<TEvent extends IEvent = IEvent> {

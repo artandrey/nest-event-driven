@@ -1,8 +1,8 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
+import { BaseHandlerRegister } from '../core/services/base-handlers-register.service';
+import { EventBus } from '../core/services/event-bus';
 import { EventDrivenCore } from './constants';
-import { EventBus } from './event-bus';
-import { BaseHandlerRegister } from './services/base-handlers-register.service';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
 import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
