@@ -1,7 +1,6 @@
 import { Injectable, Type } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 
-import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
 import { EventOption } from '../interfaces/event-handler.interface';
 import { IHandlerRegister } from '../interfaces/handler-register.interface';
 import { IEventHandlerSignature } from '../interfaces/handler-signature.interface';
@@ -14,75 +13,21 @@ export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHan
 
   constructor(private moduleRef: ModuleRef) {}
 
-  registerHandler(handler: TypeT): boolean {
-    const eventOptions = this.reflectEventOptions(handler);
-    if (!eventOptions) {
-      return false;
-    }
-
-    try {
-      const instance = this.moduleRef.get(handler, { strict: false });
-
-      if (instance) {
-        if (Array.isArray(eventOptions)) {
-          for (const singleTarget of eventOptions) {
-            this.registerHandlerSignature(singleTarget);
-            const handlerKey = this.buildHandlerKey(singleTarget);
-            const set = this.handlers.get(handlerKey) ?? new Set();
-            this.handlers.set(handlerKey, set.add(instance));
-          }
-        } else {
-          this.registerHandlerSignature(eventOptions);
-          const handlerKey = this.buildHandlerKey(eventOptions);
-          const set = this.handlers.get(handlerKey) ?? new Set();
-          this.handlers.set(handlerKey, set.add(instance));
-        }
-      }
-    } catch {
-      try {
-        this.moduleRef.introspect(handler);
-        if (Array.isArray(eventOptions)) {
-          for (const singleTarget of eventOptions) {
-            this.registerHandlerSignature(singleTarget);
-            const handlerKey = this.buildHandlerKey(singleTarget);
-            const set = this.scopedHandlers.get(handlerKey) ?? new Set();
-            this.scopedHandlers.set(handlerKey, set.add(handler));
-          }
-        } else {
-          this.registerHandlerSignature(eventOptions);
-          const handlerKey = this.buildHandlerKey(eventOptions);
-          const set = this.scopedHandlers.get(handlerKey) ?? new Set();
-          this.scopedHandlers.set(handlerKey, set.add(handler));
-        }
-      } catch {
-        return false;
-      }
-    }
-
-    return true;
-  }
-  private buildHandlerKey(eventName: string): string;
-  private buildHandlerKey(eventOptions: EventOption): string;
-  private buildHandlerKey(event: EventOption | string): string {
-    if (typeof event === 'string') {
-      return event;
-    }
-    if (typeof event === 'function') {
-      return event.name;
-    }
-    return event.event.name;
+  // Add handler to the handlers map
+  addHandler(handlerKey: string, instance: T): void {
+    const set = this.handlers.get(handlerKey) ?? new Set();
+    this.handlers.set(handlerKey, set.add(instance));
   }
 
-  private registerHandlerSignature(eventOptions: EventOption) {
-    if (typeof eventOptions === 'function') {
-      this.handlersSignatures.push({ event: eventOptions });
-    } else {
-      this.handlersSignatures.push(eventOptions);
-    }
+  // Add scoped handler to the scopedHandlers map
+  addScopedHandler(handlerKey: string, handler: TypeT): void {
+    const set = this.scopedHandlers.get(handlerKey) ?? new Set();
+    this.scopedHandlers.set(handlerKey, set.add(handler));
   }
 
-  private reflectEventOptions(handler: TypeT): EventOption {
-    return Reflect.getMetadata(EVENTS_HANDLER_METADATA, handler);
+  // Add handler signature to the handlersSignatures array
+  addHandlerSignature(signature: IEventHandlerSignature): void {
+    this.handlersSignatures.push(signature);
   }
 
   async get<E>(event: E, context?: object): Promise<T[] | undefined> {
@@ -113,5 +58,17 @@ export class HandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHan
 
   getHandlerSignatures(): Readonly<IEventHandlerSignature[]> {
     return this.handlersSignatures;
+  }
+
+  private buildHandlerKey(eventName: string): string;
+  private buildHandlerKey(eventOptions: EventOption): string;
+  private buildHandlerKey(event: EventOption | string): string {
+    if (typeof event === 'string') {
+      return event;
+    }
+    if (typeof event === 'function') {
+      return event.name;
+    }
+    return event.event.name;
   }
 }

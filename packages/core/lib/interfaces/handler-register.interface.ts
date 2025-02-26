@@ -4,17 +4,30 @@ import { IEventHandlerSignature } from './handler-signature.interface';
 
 /**
  * Handler register service that manages event handlers.
- * Responsible for registering handlers and retrieving handler signatures.
+ * Responsible for storing handlers and retrieving handler signatures.
  * @template T The handler type
  * @template TypeT The handler class type
  */
 export interface IHandlerRegister<T = unknown, TypeT extends Type<T> = Type<T>> {
   /**
-   * Registers a handler for events.
-   * @param handler The handler to register
-   * @returns A boolean indicating whether the registration was successful
+   * Adds a handler to the handlers map
+   * @param handlerKey The key to store the handler under
+   * @param instance The handler instance
    */
-  registerHandler(handler: TypeT): boolean;
+  addHandler(handlerKey: string, instance: T): void;
+
+  /**
+   * Adds a scoped handler to the scopedHandlers map
+   * @param handlerKey The key to store the handler under
+   * @param handler The handler type
+   */
+  addScopedHandler(handlerKey: string, handler: TypeT): void;
+
+  /**
+   * Adds a handler signature to the handlersSignatures array
+   * @param signature The handler signature to add
+   */
+  addHandlerSignature(signature: IEventHandlerSignature): void;
 
   /**
    * Gets handlers for a specific event.

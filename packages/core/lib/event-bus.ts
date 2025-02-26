@@ -10,6 +10,7 @@ import { IEventHandler } from './interfaces/event-handler.interface';
 import { IEventPublisher } from './interfaces/event-publisher.interface';
 import { IEvent } from './interfaces/event.interface';
 import { IHandlerCallOptions } from './interfaces/handler-call-options.interface';
+import { HandlerRegistrar } from './services/handler-registrar.service';
 import { HandlerRegister } from './services/handlers-register.service';
 import { ObservableBus } from './utils/observable-bus';
 
@@ -24,7 +25,10 @@ export class EventBus<TEvent extends IEvent = IEvent>
 
   protected _pubsub: IEventPublisher | null = null;
 
-  constructor(private readonly handlersRegister: HandlerRegister<IEventHandler<TEvent>>) {
+  constructor(
+    private readonly handlersRegister: HandlerRegister<IEventHandler<TEvent>>,
+    private readonly handlerRegistrar: HandlerRegistrar<TEvent>,
+  ) {
     super();
     this.subscriptions = [];
   }
@@ -76,7 +80,7 @@ export class EventBus<TEvent extends IEvent = IEvent>
   }
 
   public register(handlers: EventHandlerType<TEvent>[] = []) {
-    handlers.forEach((handler) => this.registerHandler(handler));
+    this.handlerRegistrar.register(handlers);
   }
 
   async synchronouslyConsumeByStrictlySingleHandler(event: TEvent, options?: IHandlerCallOptions): Promise<void> {
@@ -100,11 +104,7 @@ export class EventBus<TEvent extends IEvent = IEvent>
   }
 
   protected registerHandler(handler: EventHandlerType<TEvent>) {
-    if (this.handlersRegister.registerHandler(handler)) {
-      const eventsNames = this.reflectEventsNames(handler);
-
-      eventsNames.map((event) => this.bind(event.name));
-    }
+    return this.handlerRegistrar.register([handler]);
   }
 
   protected ofEventName(name: string) {
