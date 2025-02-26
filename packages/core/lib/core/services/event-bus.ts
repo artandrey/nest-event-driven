@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, Type } from '@nestjs/common';
+import { OnModuleDestroy, Type } from '@nestjs/common';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
@@ -11,7 +11,6 @@ import { ObservableBus } from '../utils/observable-bus';
 
 export type EventHandlerType<TEvent extends IEvent = IEvent> = Type<IEventHandler<TEvent>>;
 
-@Injectable()
 export class EventBus<TEvent extends IEvent = IEvent>
   extends ObservableBus<TEvent>
   implements IEventBus<TEvent>, OnModuleDestroy

@@ -1,28 +1,24 @@
-import { Injectable, Type } from '@nestjs/common';
+import { Type } from '@nestjs/common';
 
 import { EventOption } from '../interfaces/event-handler.interface';
 import { IHandlerRegister } from '../interfaces/handler-register.interface';
 import { IEventHandlerSignature } from '../interfaces/handler-signature.interface';
 
-@Injectable()
 export class BaseHandlerRegister<T, TypeT extends Type<T> = Type<T>> implements IHandlerRegister<T, TypeT> {
   private handlers = new Map<string, Set<T>>();
   private scopedHandlers = new Map<string, Set<TypeT>>();
   private handlersSignatures: IEventHandlerSignature[] = [];
 
-  // Add handler to the handlers map
   addHandler(handlerKey: string, instance: T): void {
     const set = this.handlers.get(handlerKey) ?? new Set();
     this.handlers.set(handlerKey, set.add(instance));
   }
 
-  // Add scoped handler to the scopedHandlers map
   addScopedHandler(handlerKey: string, handler: TypeT): void {
     const set = this.scopedHandlers.get(handlerKey) ?? new Set();
     this.scopedHandlers.set(handlerKey, set.add(handler));
   }
 
-  // Add handler signature to the handlersSignatures array
   addHandlerSignature(signature: IEventHandlerSignature): void {
     this.handlersSignatures.push(signature);
   }
