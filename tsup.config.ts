@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: {
-    'dist/core/index': './packages/core/lib/index.ts',
+    'core/dist/index': './packages/core/lib/index.ts',
   },
   splitting: true,
   sourcemap: true,

@@ -1,7 +1,7 @@
 import { Inject, Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-import { IEvent, IEventHandler, IHandlerRegister } from '../../core/interfaces';
+import type { IEvent, IEventHandler, IHandlerRegister } from '../../core/interfaces';
 import { EventOption } from '../../core/interfaces/event-handler.interface';
 import { IEventHandlerSignature } from '../../core/interfaces/handler-signature.interface';
 import { EventDrivenCore } from '../constants';
