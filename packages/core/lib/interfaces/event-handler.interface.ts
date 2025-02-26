@@ -1,6 +1,9 @@
-import { Scope } from '@nestjs/common';
-
 import { IEvent } from './event.interface';
+
+export enum EventHandlerScope {
+  SINGLETON = 'singleton',
+  SCOPED = 'scoped',
+}
 
 export type EventSignature = new (...args: any[]) => IEvent;
 export type EventOption =
@@ -11,7 +14,7 @@ export type EventOption =
     };
 
 export interface EventHandlerProviderOptions {
-  scope?: Scope;
+  scope?: EventHandlerScope;
 }
 
 export interface IEventHandler<TEvent extends IEvent, TContext = void> {

@@ -1,12 +1,12 @@
 import { Injectable, Scope } from '@nestjs/common';
 import 'reflect-metadata';
 
-import { EventHandlerProviderOptions, EventOption } from '../interfaces/event-handler.interface';
+import { EventHandlerProviderOptions, EventHandlerScope, EventOption } from '../interfaces/event-handler.interface';
 import { EVENTS_HANDLER_METADATA } from './constants';
 
 export function EventHandler(
   events: EventOption | EventOption[],
-  options: EventHandlerProviderOptions = { scope: Scope.DEFAULT },
+  options: EventHandlerProviderOptions = { scope: EventHandlerScope.SINGLETON },
 ): ClassDecorator {
   return (target: any) => {
     if (Array.isArray(events)) {
@@ -14,6 +14,9 @@ export function EventHandler(
     } else {
       Reflect.defineMetadata(EVENTS_HANDLER_METADATA, [events], target);
     }
-    Injectable({ scope: options.scope })(target);
+
+    // Map EventHandlerScope to NestJS Scope
+    const nestScope = options.scope === EventHandlerScope.SCOPED ? Scope.REQUEST : Scope.DEFAULT;
+    Injectable({ scope: nestScope })(target);
   };
 }

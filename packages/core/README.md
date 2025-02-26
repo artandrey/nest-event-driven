@@ -183,8 +183,9 @@ The event-driven module provides several key definitions:
 You can create scoped handlers that receive context information:
 
 ```typescript
+import { EventHandlerScope } from '@nest-event-driven/core';
 import { EventHandler, IEventHandler } from '@nestjs-event-driven/core';
-import { Inject, Scope } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 
 import { UserCreatedEvent } from './events/user-created.event';
@@ -193,7 +194,8 @@ interface IEventContext {
   requestId: string;
 }
 
-@EventHandler({ event: UserCreatedEvent }, { scope: Scope.REQUEST })
+@Injectable()
+@EventHandler({ event: UserCreatedEvent }, { scope: EventHandlerScope.SCOPED })
 export class ScopedUserCreatedEventHandler implements IEventHandler<UserCreatedEvent> {
   constructor(@Inject(REQUEST) private readonly context: IEventContext) {
     // Access request context

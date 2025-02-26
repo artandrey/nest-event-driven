@@ -1,8 +1,8 @@
-import { Inject, Scope } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { describe } from 'node:test';
-import { EventBus, EventDrivenModule, EventHandler, IEvent, IEventHandler } from 'packages/core/lib';
+import { EventBus, EventDrivenModule, EventHandler, EventHandlerScope, IEvent, IEventHandler } from 'packages/core/lib';
 import { expect, vi } from 'vitest';
 import { it } from 'vitest';
 
@@ -14,7 +14,7 @@ describe('Scoped', () => {
   it('creates handler for each event', async () => {
     const constructorHandler = vi.fn();
 
-    @EventHandler({ event: TestEvent }, { scope: Scope.REQUEST })
+    @EventHandler({ event: TestEvent }, { scope: EventHandlerScope.SCOPED })
     class ScopedTestEventHandler implements IEventHandler<TestEvent> {
       constructor(@Inject(REQUEST) private readonly request: any) {
         constructorHandler(request);
