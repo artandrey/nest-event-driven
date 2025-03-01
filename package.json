@@ -46,7 +46,7 @@
     "globals": "^15.14.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "prettier": "^3.4.2",
+    "prettier": "^3.5.2",
     "@types/node": "^22.13.1",
     "@changesets/cli": "^2.27.12",
     "reflect-metadata": "^0.2.2",
