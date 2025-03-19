@@ -37,7 +37,7 @@
     "url": "https://github.com/artandrey/nest-event-driven/issues"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.12",
+    "@changesets/cli": "^2.28.1",
     "@eslint/js": "^9.22.0",
     "@nestjs/common": "^11.0.8",
     "@nestjs/core": "^11.0.8",
