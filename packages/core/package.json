@@ -6,6 +6,15 @@
     "dist",
     "README.md"
   ],
+  "author": "Andrii Artemenko",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artandrey/nest-event-driven.git"
+  },
+  "bugs": {
+    "url": "https://github.com/artandrey/nest-event-driven/issues"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
