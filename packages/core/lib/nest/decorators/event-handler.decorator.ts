@@ -1,11 +1,8 @@
 import { Injectable, Scope } from '@nestjs/common';
 import 'reflect-metadata';
 
-import {
-  EventHandlerProviderOptions,
-  EventHandlerScope,
-  EventOption,
-} from '../../core/interfaces/event-handler.interface';
+import { EventHandlerScope, EventOption } from '../../core/';
+import { EventHandlerProviderOptions } from '../types';
 import { EVENTS_HANDLER_METADATA } from './constants';
 
 export function EventHandler(

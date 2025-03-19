@@ -1,2 +1,1 @@
-export * from './interfaces';
-export * from './services';
+export * from '@event-driven-architecture/core';

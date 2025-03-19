@@ -71,6 +71,9 @@ importers:
 
   packages/core:
     dependencies:
+      '@event-driven-architecture/core':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@nestjs/common':
         specifier: ^10.0.0 || ^11.0.0
         version: 11.0.8(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -511,6 +514,9 @@ packages:
   '@eslint/plugin-kit@0.2.5':
     resolution: {integrity: sha512-lB05FkqEdUg2AA0xEbUz0SnkXT1LcCTa438W4IWTUh4hdOnVbQyOJ81OrDXsJk/LSiJHubgGEFoR5EHq1NsH1A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@event-driven-architecture/core@0.2.0':
+    resolution: {integrity: sha512-wU66fZnWs6lWMcZ+k4PNQ9Cmsm7d6renGe5HTfC3mC6jZGxUd1Nm0dtaCco6QlTSY3S88PK5H7MnIQu7uyZElQ==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -2560,6 +2566,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.10.0
       levn: 0.4.1
+
+  '@event-driven-architecture/core@0.2.0': {}
 
   '@humanfs/core@0.19.1': {}
 
