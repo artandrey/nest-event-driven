@@ -12,23 +12,16 @@ jobs:
     strategy:
       matrix:
         check:
-          - type: 'lint'
-            name: 'lint / Linting and formatting check'
-            use_regexp: false
-          - type: 'test'
-            name: null
-            regexp: '^test / Test with NestJS'
-            use_regexp: true
-          - type: 'build'
-            name: 'Build check'
-            use_regexp: false
+          - 'lint / Linting and formatting check'
+          - 'test / Test with NestJS 10.x.x'
+          - 'test / Test with NestJS 11.x.x'
+          - 'Build check'
     steps:
-      - name: Wait for ${{ matrix.check.type }} check
+      - name: Wait for ${{ matrix.check }}
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-name: ${{ matrix.check.use_regexp == false && matrix.check.name || null }}
-          check-regexp: ${{ matrix.check.use_regexp == true && matrix.check.regexp || null }}
+          check-name: ${{ matrix.check }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
 
