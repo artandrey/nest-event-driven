@@ -1,7 +1,7 @@
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
+import { EventBus } from '../core';
 import { IHandlerRegister } from '../core';
-import { EventBus } from '../core/services/event-bus';
 import { EventDrivenCore } from './constants';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';

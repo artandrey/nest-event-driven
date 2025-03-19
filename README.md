@@ -10,6 +10,6 @@
 - [RabbitMQ] - To do
 - [Requested by you] - To do
 
-## Nearest Plans
+## Note
 
-- [ ] Separate the core from the nestjs module by creating a new package called '@event-driven/core' in separate repository for wider usage, better separation of concerns and testability
+This packages are based based on the [@event-driven-architecture](https://www.npmjs.com/org/event-driven-architecture)

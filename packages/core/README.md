@@ -2,6 +2,8 @@
 
 This package was inspired by [NestJS CQRS](https://github.com/nestjs/cqrs).
 
+> **Important Update**: As of the latest version, this package is now based on [@event-driven-architecture/core](https://www.npmjs.com/package/@event-driven-architecture/core). This dependency provides the core functionality while this package adds NestJS-specific integration.
+
 The main purpose of this package is to provide a core functionality for building event driven architecture in NestJS.
 `EventBus` was extended with additional methods to make it possible to extend event routing for specific integrations and enable acknowledgement mechanism for message brokers.
 
