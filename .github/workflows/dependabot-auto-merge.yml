@@ -11,13 +11,24 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' }}
     strategy:
       matrix:
-        check: ['lint / Linting and formatting check', 'test / Test check', 'Build check']
+        check:
+          - type: 'lint'
+            name: 'lint / Linting and formatting check'
+            use_regexp: false
+          - type: 'test'
+            name: null
+            regexp: '^test / Test with NestJS'
+            use_regexp: true
+          - type: 'build'
+            name: 'Build check'
+            use_regexp: false
     steps:
-      - name: Wait for ${{ matrix.check }}
+      - name: Wait for ${{ matrix.check.type }} check
         uses: lewagon/wait-on-check-action@v1.3.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-          check-name: ${{ matrix.check }}
+          check-name: ${{ matrix.check.use_regexp == false && matrix.check.name || null }}
+          check-regexp: ${{ matrix.check.use_regexp == true && matrix.check.regexp || null }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
 
