@@ -1,8 +1,9 @@
-import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { DynamicModule, Module, OnApplicationBootstrap } from '@nestjs/common';
 
-import { EventBus } from '../core';
-import { IHandlerRegister } from '../core';
+import { EventBus, IHandlerRegister } from '../core';
 import { EventDrivenCore } from './constants';
+import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './event-driven-module.config';
+import { IEventDrivenModuleOptions } from './interfaces/event-driven-module-options.interface';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
 import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
@@ -23,15 +24,66 @@ import { NestJsHandlerRegister } from './services/nest-js-handler-register.servi
   ],
   exports: [HandlerRegistrar, EventDrivenCore.EVENT_BUS, EventDrivenCore.HANDLER_REGISTER],
 })
-export class EventDrivenModule implements OnApplicationBootstrap {
+export class EventDrivenModule extends ConfigurableModuleClass implements OnApplicationBootstrap {
   constructor(
     private readonly explorerService: ExplorerService,
     private readonly handlerRegistrar: HandlerRegistrar,
-  ) {}
+  ) {
+    super();
+  }
 
-  onApplicationBootstrap() {
+  async onApplicationBootstrap() {
     const { events } = this.explorerService.explore();
 
     this.handlerRegistrar.register(events);
+  }
+
+  static forRoot(options?: IEventDrivenModuleOptions): DynamicModule {
+    return {
+      module: EventDrivenModule,
+      providers: [
+        {
+          provide: MODULE_OPTIONS_TOKEN,
+          useValue: options,
+        },
+      ],
+      global: true,
+    };
+  }
+
+  static forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
+    const { imports = [], exports = [], providers = [] } = super.register(options);
+
+    return {
+      module: EventDrivenModule,
+      imports: [...imports],
+      exports: [...exports],
+      providers: [...providers],
+      global: true,
+    };
+  }
+
+  static register(options?: IEventDrivenModuleOptions): DynamicModule {
+    return {
+      module: EventDrivenModule,
+      providers: [
+        {
+          provide: MODULE_OPTIONS_TOKEN,
+          useValue: options,
+        },
+      ],
+      global: false,
+    };
+  }
+
+  static registerAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
+    const { imports = [], exports = [], providers = [] } = super.register(options);
+    return {
+      module: EventDrivenModule,
+      imports: [...imports],
+      exports: [...exports],
+      providers: [...providers],
+      global: false,
+    };
   }
 }
