@@ -33,6 +33,7 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     private readonly handlerRegistrar: HandlerRegistrar,
     @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: EventBus,
     private moduleRef: ModuleRef,
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: IEventDrivenModuleOptions = {},
   ) {
     super();
   }
@@ -41,6 +42,12 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     const { events, publishers } = this.explorerService.explore();
 
     this.handlerRegistrar.register(events);
+
+    if (this.options.eventPublisher) {
+      this.eventBus.publisher = this.moduleRef.get(this.options.eventPublisher, { strict: false });
+      return;
+    }
+
     if (publishers.length > 1) {
       throw new MultiplePublishersFoundException(publishers);
     }
@@ -60,18 +67,20 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
           useValue: options,
         },
       ],
+      exports: [MODULE_OPTIONS_TOKEN],
       global: true,
     };
   }
 
   static forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
-    const { imports = [], exports = [], providers = [] } = super.register(options);
+    const { imports = [], exports = [], providers = [], controllers = [] } = super.configureAsync(options);
 
     return {
       module: EventDrivenModule,
       imports: [...imports],
       exports: [...exports],
       providers: [...providers],
+      controllers: [...controllers],
       global: true,
     };
   }
@@ -85,17 +94,19 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
           useValue: options,
         },
       ],
+      exports: [MODULE_OPTIONS_TOKEN],
       global: false,
     };
   }
 
   static registerAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
-    const { imports = [], exports = [], providers = [] } = super.register(options);
+    const { imports = [], exports = [], providers = [], controllers = [] } = super.configureAsync(options);
     return {
       module: EventDrivenModule,
       imports: [...imports],
       exports: [...exports],
       providers: [...providers],
+      controllers: [...controllers],
       global: false,
     };
   }

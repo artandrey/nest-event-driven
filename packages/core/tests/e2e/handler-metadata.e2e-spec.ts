@@ -21,7 +21,7 @@ describe('Handler Register Metadata', () => {
     }
 
     const testingModule = await Test.createTestingModule({
-      imports: [EventDrivenModule],
+      imports: [EventDrivenModule.forRoot()],
       providers: [TestEventHandler],
     }).compile();
 

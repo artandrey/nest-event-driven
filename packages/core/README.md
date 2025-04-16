@@ -47,11 +47,26 @@ import { Module } from '@nestjs/common';
 
 @Module({
   imports: [
-    EventDrivenModule,
+    EventDrivenModule.forRoot(),
     // other modules...
   ],
 })
 export class AppModule {}
+```
+
+You can also use the `register` method for non-global registration:
+
+```typescript
+import { EventDrivenModule } from '@nestjs-event-driven/core';
+import { Module } from '@nestjs/common';
+
+@Module({
+  imports: [
+    EventDrivenModule.register(),
+    // other modules...
+  ],
+})
+export class FeatureModule {}
 ```
 
 ## Event Handlers
@@ -128,28 +143,72 @@ export class UserService {
 
 To set up a publisher that will emit events to a message broker or your personal event flow, you can use one of the provided approaches:
 
-#### Declarative way
+#### Option 1: Using Module Options
 
-Use the `@GlobalEventPublisher` decorator when you have registered EventDrivenModule globally (using the `forRoot` method).
-Note that only one provider across the application should be annotated with @GlobalEventPublisher.
+The recommended approach is to provide the publisher using the `eventPublisher` option when configuring the module:
 
 ```typescript
-import { EventBus, IEventPublisher } from '@nestjs-event-driven/core';
-import { Module, OnApplicationBootstrap } from '@nestjs/common';
+import { EventDrivenModule, IEventPublisher } from '@nestjs-event-driven/core';
+import { Module } from '@nestjs/common';
 
-@GlobalEventPublisher()
-class MyCustomPublisher implement IEventPublisher {
+@Injectable()
+class MyCustomPublisher implements IEventPublisher {
   // ... your implementation
 }
 
 @Module({
-  imports: [EventDrivenModule.forRoot()]
+  imports: [
+    EventDrivenModule.forRoot({
+      eventPublisher: MyCustomPublisher,
+    }),
+  ],
   providers: [MyCustomPublisher],
 })
 export class AppModule {}
 ```
 
-> **TODO**: This section will be expanded with more stable approaches for setting up publishers in future releases.
+You can also use `forRootAsync` for dynamic configuration:
+
+```typescript
+import { EventDrivenModule } from '@nestjs-event-driven/core';
+import { Module } from '@nestjs/common';
+
+@Module({
+  imports: [
+    EventDrivenModule.forRootAsync({
+      useFactory: () => ({
+        eventPublisher: MyCustomPublisher,
+      }),
+    }),
+  ],
+  providers: [MyCustomPublisher],
+})
+export class AppModule {}
+```
+
+#### Option 2: Declarative way
+
+Alternatively, you can use the `@GlobalEventPublisher` decorator when you have registered EventDrivenModule globally:
+
+```typescript
+import { EventBus, GlobalEventPublisher, IEventPublisher } from '@nestjs-event-driven/core';
+import { Module } from '@nestjs/common';
+
+@GlobalEventPublisher()
+class MyCustomPublisher implements IEventPublisher {
+  // ... your implementation
+}
+
+@Module({
+  imports: [EventDrivenModule.forRoot()],
+  providers: [MyCustomPublisher],
+})
+export class AppModule {}
+```
+
+> **Note**: When both approaches are used, the `eventPublisher` option takes precedence over the `@GlobalEventPublisher` decorator. Only one provider across the application should be annotated with `@GlobalEventPublisher`.
+
+> **Note**: When using the `eventPublisher` option, provide the class token (not an instance) of your publisher implementation. The module will resolve and instantiate it automatically.
 
 ### Consuming Events Synchronously
 

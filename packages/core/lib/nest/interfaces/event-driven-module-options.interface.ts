@@ -1,2 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IEventDrivenModuleOptions {}
+import { InjectionToken } from '@nestjs/common';
+
+export interface IEventDrivenModuleOptions {
+  eventPublisher?: InjectionToken;
+}
