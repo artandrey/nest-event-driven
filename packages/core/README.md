@@ -126,28 +126,27 @@ export class UserService {
 
 ### Setting Up a Publisher
 
-To use external message brokers, you need to set up a publisher. Currently, this is done in the `onApplicationBootstrap` hook of a module:
+To set up a publisher that will emit events to a message broker or your personal event flow, you can use one of the provided approaches:
+
+#### Declarative way
+
+Use the `@GlobalEventPublisher` decorator when you have registered EventDrivenModule globally (using the `forRoot` method).
+Note that only one provider across the application should be annotated with @GlobalEventPublisher.
 
 ```typescript
-import { EventBus } from '@nestjs-event-driven/core';
+import { EventBus, IEventPublisher } from '@nestjs-event-driven/core';
 import { Module, OnApplicationBootstrap } from '@nestjs/common';
 
-import { MyCustomPublisher } from './my-custom-publisher';
+@GlobalEventPublisher()
+class MyCustomPublisher implement IEventPublisher {
+  // ... your implementation
+}
 
 @Module({
+  imports: [EventDrivenModule.forRoot()]
   providers: [MyCustomPublisher],
 })
-export class AppModule implements OnApplicationBootstrap {
-  constructor(
-    private readonly eventBus: EventBus,
-    private readonly customPublisher: MyCustomPublisher,
-  ) {}
-
-  onApplicationBootstrap() {
-    // Set the publisher for the event bus
-    this.eventBus.publisher = this.customPublisher;
-  }
-}
+export class AppModule {}
 ```
 
 > **TODO**: This section will be expanded with more stable approaches for setting up publishers in future releases.
