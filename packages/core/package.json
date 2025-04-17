@@ -27,8 +27,9 @@
     "@event-driven-architecture/core": "^0.2.0"
   },
   "devDependencies": {
-    "@nestjs/common": "10.x.x",
-    "@nestjs/core": "10.x.x",
-    "@nestjs/testing": "10.x.x"
+    "@nestjs/common": "11.x.x",
+    "@nestjs/core": "11.x.x",
+    "@nestjs/testing": "11.x.x",
+    "reflect-metadata": "0.2.x"
   }
 }
