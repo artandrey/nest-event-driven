@@ -28,7 +28,7 @@ jobs:
           pnpm remove @nestjs/common @nestjs/core @nestjs/testing
           pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }}
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
         shell: bash
       - name: Test
         run: pnpm run test:e2e
