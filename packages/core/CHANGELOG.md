@@ -1,5 +1,13 @@
 # @nestjs-event-driven/core
 
+## 0.2.0
+
+### Minor Changes
+
+- 49b78a1: Add ability to specify publisher in module options as injection token
+- 3964be2: Make event driven module configurable using `forRoot`, `forRootAsync`, `register` and `registerAsync` to define module scope
+- 49b78a1: Introduce `@GlobalEventPublisher` decorator to refine event publisher configuration for event bus, by allowing to do this in declarative way
+
 ## 0.1.0
 
 ### Minor Changes
