@@ -20,8 +20,11 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Install NestJS version
+      - name: Install NestJS version globally
         run: |
           pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }} reflect-metadata@${{ matrix.reflect-metadata-version }}
+      - name: Install NestJS package wide
+        run: |
+          pnpm --filter "./packages/*" add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }}
       - name: Test
         run: pnpm run test:e2e
