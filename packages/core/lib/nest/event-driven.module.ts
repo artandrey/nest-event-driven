@@ -31,8 +31,8 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
   constructor(
     private readonly explorerService: ExplorerService,
     private readonly handlerRegistrar: HandlerRegistrar,
+    @Inject(ModuleRef) private readonly moduleRef: ModuleRef,
     @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: EventBus,
-    private moduleRef: ModuleRef,
     @Inject(MODULE_OPTIONS_TOKEN) private readonly options: IEventDrivenModuleOptions = {},
   ) {
     super();
