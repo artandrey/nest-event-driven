@@ -10,7 +10,8 @@ inputs:
     description: 'pnpm version'
     required: false
     default: '10'
-
+env:
+  CI: true
 runs:
   using: 'composite'
   steps:
