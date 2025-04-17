@@ -17,6 +17,7 @@ jobs:
         uses: ./.github/actions/setup
       - name: Install NestJS version
         run: |
+          pnpm remove @nestjs/common @nestjs/core @nestjs/testing
           pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }}
       - name: Test
         run: pnpm run test:e2e

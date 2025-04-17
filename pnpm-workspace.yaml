@@ -1,7 +1,2 @@
 packages:
-  - ./packages/core
-
-onlyBuiltDependencies:
-  - '@nestjs/core'
-  - '@swc/core'
-  - esbuild
+  - './packages/core'
