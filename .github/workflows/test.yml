@@ -10,6 +10,11 @@ jobs:
     strategy:
       matrix:
         nest-version: ['10.x.x', '11.x.x']
+        include:
+          - nest-version: '10.x.x'
+            reflect-metadata-version: '0.1.13'
+          - nest-version: '11.x.x'
+            reflect-metadata-version: '0.2.x'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -17,6 +22,6 @@ jobs:
         uses: ./.github/actions/setup
       - name: Install NestJS version
         run: |
-          pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }}
+          pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }} reflect-metadata@${{ matrix.reflect-metadata-version }}
       - name: Test
         run: pnpm run test:e2e
