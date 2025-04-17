@@ -6,7 +6,7 @@ import { IHandlerRegister } from '../core';
 import { EventDrivenCore } from './constants';
 import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './event-driven-module.config';
 import { MultiplePublishersFoundException } from './exceptions/multiple-publishers-found.exception';
-import { IEventDrivenModuleOptions } from './interfaces/event-driven-module-options.interface';
+import type { IEventDrivenModuleOptions } from './interfaces';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
 import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
