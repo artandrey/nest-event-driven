@@ -18,6 +18,6 @@ jobs:
       - name: Install NestJS version
         working-directory: ./packages/core
         run: |
-          pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }}
+          pnpm add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }} --force
       - name: Test
         run: pnpm run test:e2e
