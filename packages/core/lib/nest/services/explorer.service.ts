@@ -1,10 +1,10 @@
 import { Injectable, Type } from '@nestjs/common';
+import { ModulesContainer } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { Module } from '@nestjs/core/injector/module';
-import { ModulesContainer } from '@nestjs/core/injector/modules-container';
 
-import { IEvent, IEventHandler } from '../../core/';
-import { EVENTS_HANDLER_METADATA } from '../decorators/constants';
+import { IEvent, IEventHandler, IEventPublisher } from '../../core/';
+import { EVENTS_HANDLER_METADATA, EVENT_PUBLISHER_METADATA } from '../decorators/constants';
 
 @Injectable()
 export class ExplorerService<TEvent extends IEvent = IEvent> {
@@ -16,7 +16,10 @@ export class ExplorerService<TEvent extends IEvent = IEvent> {
     const events = this.flatMap<IEventHandler<TEvent>>(modules, (instance) =>
       this.filterProvider(instance, EVENTS_HANDLER_METADATA),
     );
-    return { events };
+    const publishers = this.flatMap<IEventPublisher<TEvent>>(modules, (instance) =>
+      this.filterProvider(instance, EVENT_PUBLISHER_METADATA),
+    );
+    return { events, publishers };
   }
 
   flatMap<T>(modules: Module[], callback: (instance: InstanceWrapper) => Type<any> | undefined): Type<T>[] {

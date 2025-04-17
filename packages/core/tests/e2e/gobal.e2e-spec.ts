@@ -17,7 +17,7 @@ describe('Global', () => {
     }
 
     const testingModule = await Test.createTestingModule({
-      imports: [EventDrivenModule],
+      imports: [EventDrivenModule.forRoot()],
       providers: [TestEventHandler],
     }).compile();
     await testingModule.init();
@@ -41,7 +41,7 @@ describe('Global', () => {
     }
 
     const testingModule = await Test.createTestingModule({
-      imports: [EventDrivenModule],
+      imports: [EventDrivenModule.forRoot()],
       providers: [TestEventHandler, TestEventHandler2],
     }).compile();
 
@@ -67,7 +67,7 @@ describe('Global', () => {
     }
 
     const testingModule = await Test.createTestingModule({
-      imports: [EventDrivenModule],
+      imports: [EventDrivenModule.forRoot()],
       providers: [TestEventHandler, TestEventHandler2],
     }).compile();
 

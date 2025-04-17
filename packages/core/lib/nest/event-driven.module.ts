@@ -1,9 +1,12 @@
-import { DynamicModule, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { DynamicModule, Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 
-import { EventBus, IHandlerRegister } from '../core';
+import { EventBus } from '../core';
+import { IHandlerRegister } from '../core';
 import { EventDrivenCore } from './constants';
 import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './event-driven-module.config';
-import { IEventDrivenModuleOptions } from './interfaces/event-driven-module-options.interface';
+import { MultiplePublishersFoundException } from './exceptions/multiple-publishers-found.exception';
+import type { IEventDrivenModuleOptions } from './interfaces';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
 import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
@@ -28,14 +31,31 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
   constructor(
     private readonly explorerService: ExplorerService,
     private readonly handlerRegistrar: HandlerRegistrar,
+    @Inject(ModuleRef) private readonly moduleRef: ModuleRef,
+    @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: EventBus,
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: IEventDrivenModuleOptions = {},
   ) {
     super();
   }
 
   async onApplicationBootstrap() {
-    const { events } = this.explorerService.explore();
+    const { events, publishers } = this.explorerService.explore();
 
     this.handlerRegistrar.register(events);
+
+    if (this.options.eventPublisher) {
+      this.eventBus.publisher = this.moduleRef.get(this.options.eventPublisher, { strict: false });
+      return;
+    }
+
+    if (publishers.length > 1) {
+      throw new MultiplePublishersFoundException(publishers);
+    }
+
+    if (publishers[0]) {
+      const publisher = this.moduleRef.get(publishers[0], { strict: false });
+      this.eventBus.publisher = publisher;
+    }
   }
 
   static forRoot(options?: IEventDrivenModuleOptions): DynamicModule {
@@ -47,18 +67,20 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
           useValue: options,
         },
       ],
+      exports: [MODULE_OPTIONS_TOKEN],
       global: true,
     };
   }
 
   static forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
-    const { imports = [], exports = [], providers = [] } = super.register(options);
+    const { imports = [], exports = [], providers = [], controllers = [] } = super.configureAsync(options);
 
     return {
       module: EventDrivenModule,
       imports: [...imports],
       exports: [...exports],
       providers: [...providers],
+      controllers: [...controllers],
       global: true,
     };
   }
@@ -72,17 +94,19 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
           useValue: options,
         },
       ],
+      exports: [MODULE_OPTIONS_TOKEN],
       global: false,
     };
   }
 
   static registerAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule {
-    const { imports = [], exports = [], providers = [] } = super.register(options);
+    const { imports = [], exports = [], providers = [], controllers = [] } = super.configureAsync(options);
     return {
       module: EventDrivenModule,
       imports: [...imports],
       exports: [...exports],
       providers: [...providers],
+      controllers: [...controllers],
       global: false,
     };
   }

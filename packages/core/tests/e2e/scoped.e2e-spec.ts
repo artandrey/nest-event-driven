@@ -31,7 +31,7 @@ describe('Scoped', () => {
     }
 
     const testingModule = await Test.createTestingModule({
-      imports: [EventDrivenModule],
+      imports: [EventDrivenModule.forRoot()],
       providers: [ScopedTestEventHandler],
     }).compile();
 
