@@ -58,8 +58,8 @@ importers:
         specifier: ^8.31.1
         version: 8.31.1(eslint@9.24.0)(typescript@5.8.3)
       unplugin-swc:
-        specifier: ^1.5.1
-        version: 1.5.1(@swc/core@1.11.21)(rollup@4.40.0)
+        specifier: ^1.5.2
+        version: 1.5.2(@swc/core@1.11.21)(rollup@4.40.0)
       vitest:
         specifier: ^3.1.1
         version: 3.1.1(@types/node@22.14.1)(yaml@2.7.1)
@@ -1860,8 +1860,8 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
 
-  unplugin-swc@1.5.1:
-    resolution: {integrity: sha512-/ZLrPNjChhGx3Z95pxJ4tQgfI6rWqukgYHKflrNB4zAV1izOQuDhkTn55JWeivpBxDCoK7M/TStb2aS/14PS/g==}
+  unplugin-swc@1.5.2:
+    resolution: {integrity: sha512-bf8DJO8lD1wpnwFglQpVH2XEaFfVsSU5C7yFyLwGT1gxskPtejlDeuttKxjtmHTSqrDsQrK0FCFdhw3Ny+K7hA==}
     peerDependencies:
       '@swc/core': ^1.2.108
 
@@ -3692,7 +3692,7 @@ snapshots:
 
   universalify@0.1.2: {}
 
-  unplugin-swc@1.5.1(@swc/core@1.11.21)(rollup@4.40.0):
+  unplugin-swc@1.5.2(@swc/core@1.11.21)(rollup@4.40.0):
     dependencies:
       '@rollup/pluginutils': 5.1.4(rollup@4.40.0)
       '@swc/core': 1.11.21
