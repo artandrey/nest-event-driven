@@ -1,17 +1,21 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2022",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ES2023",
+    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "tslib": ["node_modules/tslib/tslib.d.ts"]
+    }
   }
 }
