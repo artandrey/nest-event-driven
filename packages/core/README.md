@@ -71,39 +71,112 @@ export class FeatureModule {}
 
 ## Event Handlers
 
-### Creating Events
+### Event Options
 
-First, define your events by implementing the `IEvent` interface:
+The `@EventsHandler` decorator accepts either a single event option or an array of event options. Each event option can be:
+
+- A simple event class (for basic usage)
+- An object with `event` and optional `routingMetadata` properties (for advanced routing)
 
 ```typescript
-import { IEvent } from '@nestjs-event-driven/core';
+import { EventOption } from '@nestjs-event-driven/core';
 
-interface IUserCreatedEventPayload {
+// Simple event option
+const simpleOption: EventOption = UserCreatedEvent;
+
+// Advanced event option with routing metadata
+const advancedOption: EventOption = {
+  event: UserCreatedEvent,
+  routingMetadata: {
+    topic: 'user-events',
+    partition: 'created',
+  },
+};
+```
+
+### Creating Events
+
+First, define your events by implementing the `Event` interface:
+
+```typescript
+import { Event } from '@nestjs-event-driven/core';
+
+interface UserCreatedEventPayload {
   userId: string;
 }
 
-export class UserCreatedEvent implements IEvent<IUserCreatedEventPayload> {
-  constructor(public readonly payload: IUserCreatedEventPayload) {}
+export class UserCreatedEvent implements Event<UserCreatedEventPayload> {
+  constructor(public readonly payload: UserCreatedEventPayload) {}
 }
 ```
 
 ### Creating Event Handlers
 
-Next, create handlers for your events using the `@EventHandler` decorator:
+Next, create handlers for your events using the `@EventsHandler` decorator:
 
 ```typescript
-import { EventHandler, IEventHandler } from '@nestjs-event-driven/core';
+import { EventHandler, EventsHandler } from '@nestjs-event-driven/core';
 import { Injectable } from '@nestjs/common';
 
 import { UserCreatedEvent } from './events/user-created.event';
 
 @Injectable()
-@EventHandler({ event: UserCreatedEvent })
-export class UserCreatedEventHandler implements IEventHandler<UserCreatedEvent> {
+@EventsHandler({ event: UserCreatedEvent })
+export class UserCreatedEventHandler implements EventHandler<UserCreatedEvent> {
   handle(event: UserCreatedEvent): void {
     const { userId } = event.payload;
     // Handle the event
     console.log(`User created with ID: ${userId}`);
+  }
+}
+```
+
+> **Note**: For simple cases without routing metadata, you can also pass the event class directly:
+>
+> ```typescript
+> @EventsHandler(UserCreatedEvent)
+> ```
+
+#### Handling Multiple Events
+
+The `@EventsHandler` decorator also supports handling multiple events with a single handler:
+
+```typescript
+import { EventHandler, EventsHandler } from '@nestjs-event-driven/core';
+import { Injectable } from '@nestjs/common';
+
+import { UserCreatedEvent } from './events/user-created.event';
+import { UserUpdatedEvent } from './events/user-updated.event';
+
+@Injectable()
+@EventsHandler([{ event: UserCreatedEvent }, { event: UserUpdatedEvent }])
+export class UserEventHandler implements EventHandler<UserCreatedEvent | UserUpdatedEvent> {
+  handle(event: UserCreatedEvent | UserUpdatedEvent): void {
+    if (event instanceof UserCreatedEvent) {
+      // Handle user creation
+    } else if (event instanceof UserUpdatedEvent) {
+      // Handle user update
+    }
+  }
+}
+```
+
+#### Event Routing Metadata
+
+You can also provide routing metadata for events, which can be useful for message brokers or custom routing logic:
+
+```typescript
+@Injectable()
+@EventsHandler({
+  event: UserCreatedEvent,
+  routingMetadata: {
+    topic: 'user-events',
+    partition: 'user-created',
+  },
+})
+export class UserCreatedEventHandler implements EventHandler<UserCreatedEvent> {
+  handle(event: UserCreatedEvent): void {
+    // Handle the event
   }
 }
 ```
@@ -148,11 +221,11 @@ To set up a publisher that will emit events to a message broker or your personal
 The recommended approach is to provide the publisher using the `eventPublisher` option when configuring the module:
 
 ```typescript
-import { EventDrivenModule, IEventPublisher } from '@nestjs-event-driven/core';
+import { EventDrivenModule, EventPublisher } from '@nestjs-event-driven/core';
 import { Module } from '@nestjs/common';
 
 @Injectable()
-class MyCustomPublisher implements IEventPublisher {
+class MyCustomPublisher implements EventPublisher {
   // ... your implementation
 }
 
@@ -191,11 +264,11 @@ export class AppModule {}
 Alternatively, you can use the `@GlobalEventPublisher` decorator when you have registered EventDrivenModule globally:
 
 ```typescript
-import { EventBus, GlobalEventPublisher, IEventPublisher } from '@nestjs-event-driven/core';
+import { EventBus, EventPublisher, GlobalEventPublisher } from '@nestjs-event-driven/core';
 import { Module } from '@nestjs/common';
 
 @GlobalEventPublisher()
-class MyCustomPublisher implements IEventPublisher {
+class MyCustomPublisher implements EventPublisher {
   // ... your implementation
 }
 
@@ -226,38 +299,38 @@ await eventBus.synchronouslyConsumeByMultipleHandlers(new UserCreatedEvent({ use
 
 The event-driven module provides several key definitions:
 
-**Event (IEvent)** - Base interface for all events. Events are simple data structures that contain information about what happened in your application.
+**Event (Event)** - Base interface for all events. Events are simple data structures that contain information about what happened in your application.
 
-**Event Handler (IEventHandler)** - Interface for event handlers. Handlers contain the business logic that should be executed when a specific event occurs.
+**Event Handler (EventHandler)** - Interface for event handlers. Handlers contain the business logic that should be executed when a specific event occurs.
 
-**Event Bus (IEventBus)** - Core interface for the event bus. The event bus is responsible for publishing events and routing them to the appropriate handlers.
+**Event Bus (EventBus)** - Core interface for the event bus. The event bus is responsible for publishing events and routing them to the appropriate handlers.
 
-**Event Publisher (IEventPublisher)** - Interface for publishing events to external systems. Publishers are responsible for sending events to external message brokers or other systems.
+**Event Publisher (EventPublisher)** - Interface for publishing events to external systems. Publishers are responsible for sending events to external message brokers or other systems.
 
-**Event Subscriber (IEventSubscriber)** - Interface for subscribing to events. Used for in-app synchronous events, similar to an event emitter.
+**Event Subscriber (EventSubscriber)** - Interface for subscribing to events. Used for in-app synchronous events, similar to an event emitter.
 
-**Handler Register (IHandlerRegister)** - Interface for the handler register service. Responsible for registering handlers and retrieving handler signatures.
+**Handler Register (HandlerRegister)** - Interface for the handler register service. Responsible for registering handlers and retrieving handler signatures.
 
 ## Scoped Handlers with Context
 
 You can create scoped handlers that receive context information:
 
 ```typescript
-import { EventHandlerScope } from '@nest-event-driven/core';
-import { EventHandler, IEventHandler } from '@nestjs-event-driven/core';
+import { EventHandlerScope } from '@nestjs-event-driven/core';
+import { EventHandler, EventsHandler } from '@nestjs-event-driven/core';
 import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
 
 import { UserCreatedEvent } from './events/user-created.event';
 
-interface IEventContext {
+interface EventContext {
   requestId: string;
 }
 
 @Injectable()
-@EventHandler({ event: UserCreatedEvent }, { scope: EventHandlerScope.SCOPED })
-export class ScopedUserCreatedEventHandler implements IEventHandler<UserCreatedEvent> {
-  constructor(@Inject(REQUEST) private readonly context: IEventContext) {
+@EventsHandler({ event: UserCreatedEvent }, { scope: EventHandlerScope.SCOPED })
+export class ScopedUserCreatedEventHandler implements EventHandler<UserCreatedEvent> {
+  constructor(@Inject(REQUEST) private readonly context: EventContext) {
     // Access request context
     console.log('Request context:', context);
   }

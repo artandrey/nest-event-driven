@@ -1,11 +1,12 @@
 import { Injectable, Scope } from '@nestjs/common';
 import 'reflect-metadata';
 
-import { EventHandlerScope, EventOption } from '../../core/';
+import { EventHandlerScope } from '../../core';
+import { EventOption } from '../interfaces';
 import { EventHandlerProviderOptions } from '../types';
 import { EVENTS_HANDLER_METADATA } from './constants';
 
-export function EventHandler(
+export function EventsHandler(
   events: EventOption | EventOption[],
   options: EventHandlerProviderOptions = { scope: EventHandlerScope.SINGLETON },
 ): ClassDecorator {

@@ -3,17 +3,17 @@ import { REQUEST } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { describe } from 'node:test';
 import {
+  Event,
+  EventBus,
   EventDrivenCore,
   EventDrivenModule,
   EventHandler,
   EventHandlerScope,
-  IEvent,
-  IEventBus,
-  IEventHandler,
+  EventsHandler,
 } from 'packages/core/lib';
 import { expect, it, vi } from 'vitest';
 
-class TestEvent implements IEvent<object> {
+class TestEvent implements Event<object> {
   constructor(public readonly payload: object) {}
 }
 
@@ -21,8 +21,8 @@ describe('Scoped', () => {
   it('creates handler for each event', async () => {
     const constructorHandler = vi.fn();
 
-    @EventHandler({ event: TestEvent }, { scope: EventHandlerScope.SCOPED })
-    class ScopedTestEventHandler implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent }, { scope: EventHandlerScope.SCOPED })
+    class ScopedTestEventHandler implements EventHandler<TestEvent> {
       constructor(@Inject(REQUEST) private readonly request: any) {
         constructorHandler(request);
       }
@@ -37,7 +37,7 @@ describe('Scoped', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
+    const eventBus = testingModule.get<EventBus>(EventDrivenCore.EVENT_BUS);
 
     const contextA = { a: 1 };
     const contextB = { b: 2 };

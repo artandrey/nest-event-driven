@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { GlobalEventPublisher, IEvent, IEventBus, IEventPublisher } from 'packages/core/lib';
 import { EventDrivenCore } from 'packages/core/lib/nest/constants';
 import { EventDrivenModule } from 'packages/core/lib/nest/event-driven.module';
-import { IEventDrivenModuleOptions } from 'packages/core/lib/nest/interfaces/event-driven-module-options.interface';
+import { EventDrivenModuleOptions } from 'packages/core/lib/nest/interfaces/event-driven-module-options.interface';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 class TestEvent implements IEvent<object> {
@@ -20,8 +20,8 @@ class TestPublisher implements IEventPublisher<IEvent> {
   }
 }
 
-class TestPublisherFactory implements ConfigurableModuleOptionsFactory<IEventDrivenModuleOptions, 'create'> {
-  create(): IEventDrivenModuleOptions {
+class TestPublisherFactory implements ConfigurableModuleOptionsFactory<EventDrivenModuleOptions, 'create'> {
+  create(): EventDrivenModuleOptions {
     return {
       eventPublisher: TestPublisher,
     };

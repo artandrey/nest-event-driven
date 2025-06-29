@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
-import { IEventBus } from 'packages/core/dist';
-import { EventDrivenCore, EventDrivenModule, EventHandler, IEvent, IEventHandler } from 'packages/core/lib';
+import { EventBus } from 'packages/core/dist';
+import { Event, EventDrivenCore, EventDrivenModule, EventHandler, EventsHandler } from 'packages/core/lib';
 import { describe, expect, it, vi } from 'vitest';
 
-class TestEvent implements IEvent<object> {
+class TestEvent implements Event<object> {
   constructor(public readonly payload: object) {}
 }
 
@@ -11,8 +11,8 @@ describe('Global', () => {
   it('consumes single event', async () => {
     const handleConsume = vi.fn();
 
-    @EventHandler({ event: TestEvent })
-    class TestEventHandler implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent })
+    class TestEventHandler implements EventHandler<TestEvent> {
       handle = handleConsume;
     }
 
@@ -22,7 +22,7 @@ describe('Global', () => {
     }).compile();
     await testingModule.init();
 
-    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
+    const eventBus = testingModule.get<EventBus>(EventDrivenCore.EVENT_BUS);
 
     await eventBus.synchronouslyConsumeByStrictlySingleHandler(new TestEvent({}));
 
@@ -30,13 +30,13 @@ describe('Global', () => {
   });
 
   it('throws error in case there are multiple handlers for the same event', async () => {
-    @EventHandler({ event: TestEvent })
-    class TestEventHandler implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent })
+    class TestEventHandler implements EventHandler<TestEvent> {
       handle(): void {}
     }
 
-    @EventHandler({ event: TestEvent })
-    class TestEventHandler2 implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent })
+    class TestEventHandler2 implements EventHandler<TestEvent> {
       handle(): void {}
     }
 
@@ -47,7 +47,7 @@ describe('Global', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
+    const eventBus = testingModule.get<EventBus>(EventDrivenCore.EVENT_BUS);
 
     await expect(eventBus.synchronouslyConsumeByStrictlySingleHandler(new TestEvent({}))).rejects.toThrow();
   });
@@ -56,13 +56,13 @@ describe('Global', () => {
     const handleConsume = vi.fn();
     const handleConsume2 = vi.fn();
 
-    @EventHandler({ event: TestEvent })
-    class TestEventHandler implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent })
+    class TestEventHandler implements EventHandler<TestEvent> {
       handle = handleConsume;
     }
 
-    @EventHandler({ event: TestEvent })
-    class TestEventHandler2 implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent })
+    class TestEventHandler2 implements EventHandler<TestEvent> {
       handle = handleConsume2;
     }
 
@@ -73,7 +73,7 @@ describe('Global', () => {
 
     await testingModule.init();
 
-    const eventBus = testingModule.get<IEventBus>(EventDrivenCore.EVENT_BUS);
+    const eventBus = testingModule.get<EventBus>(EventDrivenCore.EVENT_BUS);
 
     await eventBus.synchronouslyConsumeByMultipleHandlers(new TestEvent({}));
 

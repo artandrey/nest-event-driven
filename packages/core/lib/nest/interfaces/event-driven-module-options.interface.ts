@@ -1,5 +1,5 @@
 import { InjectionToken } from '@nestjs/common';
 
-export interface IEventDrivenModuleOptions {
+export interface EventDrivenModuleOptions {
   eventPublisher?: InjectionToken;
 }

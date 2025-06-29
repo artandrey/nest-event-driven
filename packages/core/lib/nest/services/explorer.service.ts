@@ -3,20 +3,20 @@ import { ModulesContainer } from '@nestjs/core';
 import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
 import { Module } from '@nestjs/core/injector/module';
 
-import { IEvent, IEventHandler, IEventPublisher } from '../../core/';
+import { Event, EventHandler, EventPublisher } from '../../core/';
 import { EVENTS_HANDLER_METADATA, EVENT_PUBLISHER_METADATA } from '../decorators/constants';
 
 @Injectable()
-export class ExplorerService<TEvent extends IEvent = IEvent> {
+export class ExplorerService<TEvent extends Event = Event> {
   constructor(private readonly modulesContainer: ModulesContainer) {}
 
   explore() {
     const modules = [...this.modulesContainer.values()];
 
-    const events = this.flatMap<IEventHandler<TEvent>>(modules, (instance) =>
+    const events = this.flatMap<EventHandler<TEvent>>(modules, (instance) =>
       this.filterProvider(instance, EVENTS_HANDLER_METADATA),
     );
-    const publishers = this.flatMap<IEventPublisher<TEvent>>(modules, (instance) =>
+    const publishers = this.flatMap<EventPublisher<TEvent>>(modules, (instance) =>
       this.filterProvider(instance, EVENT_PUBLISHER_METADATA),
     );
     return { events, publishers };
