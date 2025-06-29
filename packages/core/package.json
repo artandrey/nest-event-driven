@@ -24,7 +24,7 @@
     "reflect-metadata": "^0.1.13 || ^0.2.0"
   },
   "dependencies": {
-    "@event-driven-architecture/core": "^0.2.0"
+    "@event-driven-architecture/core": "^0.4.2"
   },
   "devDependencies": {
     "@nestjs/common": "11.1.2",
