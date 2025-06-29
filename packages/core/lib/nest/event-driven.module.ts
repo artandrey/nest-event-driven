@@ -5,7 +5,7 @@ import { BaseEventBus, HandlerRegister } from '../core';
 import { EventDrivenCore } from './constants';
 import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './event-driven-module.config';
 import { MultiplePublishersFoundException } from './exceptions/multiple-publishers-found.exception';
-import type { IEventDrivenModuleOptions } from './interfaces';
+import type { EventDrivenModuleOptions } from './interfaces';
 import { ExplorerService } from './services/explorer.service';
 import { HandlerRegistrar } from './services/handler-registrar.service';
 import { NestJsHandlerRegister } from './services/nest-js-handler-register.service';
@@ -32,7 +32,7 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     private readonly handlerRegistrar: HandlerRegistrar,
     private readonly moduleRef: ModuleRef,
     @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: BaseEventBus,
-    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: IEventDrivenModuleOptions = {},
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: EventDrivenModuleOptions = {},
   ) {
     super();
   }
@@ -57,7 +57,7 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     }
   }
 
-  static forRoot(options?: IEventDrivenModuleOptions): DynamicModule {
+  static forRoot(options?: EventDrivenModuleOptions): DynamicModule {
     return {
       module: EventDrivenModule,
       providers: [
@@ -84,7 +84,7 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     };
   }
 
-  static register(options?: IEventDrivenModuleOptions): DynamicModule {
+  static register(options?: EventDrivenModuleOptions): DynamicModule {
     return {
       module: EventDrivenModule,
       providers: [
