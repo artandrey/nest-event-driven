@@ -1,8 +1,7 @@
 import { DynamicModule, Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-import { EventBus } from '../core';
-import { IHandlerRegister } from '../core';
+import { BaseEventBus, HandlerRegister } from '../core';
 import { EventDrivenCore } from './constants';
 import { ASYNC_OPTIONS_TYPE, ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } from './event-driven-module.config';
 import { MultiplePublishersFoundException } from './exceptions/multiple-publishers-found.exception';
@@ -21,7 +20,7 @@ import { NestJsHandlerRegister } from './services/nest-js-handler-register.servi
     HandlerRegistrar,
     {
       provide: EventDrivenCore.EVENT_BUS,
-      useFactory: (handlerRegister: IHandlerRegister) => new EventBus(handlerRegister),
+      useFactory: (handlerRegister: HandlerRegister) => new BaseEventBus(handlerRegister),
       inject: [EventDrivenCore.HANDLER_REGISTER],
     },
   ],
@@ -32,7 +31,7 @@ export class EventDrivenModule extends ConfigurableModuleClass implements OnAppl
     private readonly explorerService: ExplorerService,
     private readonly handlerRegistrar: HandlerRegistrar,
     private readonly moduleRef: ModuleRef,
-    @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: EventBus,
+    @Inject(EventDrivenCore.EVENT_BUS) private readonly eventBus: BaseEventBus,
     @Inject(MODULE_OPTIONS_TOKEN) private readonly options: IEventDrivenModuleOptions = {},
   ) {
     super();

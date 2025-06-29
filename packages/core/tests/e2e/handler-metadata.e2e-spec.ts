@@ -1,22 +1,22 @@
 import { Test } from '@nestjs/testing';
 import {
+  Event,
   EventDrivenCore,
   EventDrivenModule,
   EventHandler,
-  IEvent,
-  IEventHandler,
-  IHandlerRegister,
+  EventsHandler,
+  HandlerRegister,
 } from 'packages/core/lib';
 import { describe, expect, it } from 'vitest';
 
 describe('Handler Register Metadata', () => {
   it('should return handler metadata', async () => {
-    class TestEvent implements IEvent<object> {
+    class TestEvent implements Event<object> {
       constructor(public readonly payload: object) {}
     }
 
-    @EventHandler({ event: TestEvent, metadata: { test: 'test' } })
-    class TestEventHandler implements IEventHandler<TestEvent> {
+    @EventsHandler({ event: TestEvent, routingMetadata: { topic: 'test' } })
+    class TestEventHandler implements EventHandler<TestEvent> {
       handle(): void {}
     }
 
@@ -27,10 +27,10 @@ describe('Handler Register Metadata', () => {
 
     await testingModule.init();
 
-    const handlerRegister = testingModule.get<IHandlerRegister>(EventDrivenCore.HANDLER_REGISTER);
+    const handlerRegister = testingModule.get<HandlerRegister>(EventDrivenCore.HANDLER_REGISTER);
 
     const handlerSignatures = handlerRegister.getHandlerSignatures();
 
-    expect(handlerSignatures).toEqual([{ event: TestEvent, metadata: { test: 'test' } }]);
+    expect(handlerSignatures).toEqual([{ event: TestEvent, routingMetadata: { topic: 'test' } }]);
   });
 });

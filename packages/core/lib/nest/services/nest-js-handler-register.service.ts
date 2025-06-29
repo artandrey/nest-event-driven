@@ -1,10 +1,13 @@
 import { Injectable, Type } from '@nestjs/common';
 import { ContextIdFactory, ModuleRef } from '@nestjs/core';
 
-import { BaseHandlerRegister } from '../../core/';
+import { BaseHandlerRegister, EventHandler } from '../../core/';
 
 @Injectable()
-export class NestJsHandlerRegister<T, TypeT extends Type<T> = Type<T>> extends BaseHandlerRegister<T, TypeT> {
+export class NestJsHandlerRegister<T extends EventHandler, TypeT extends Type<T> = Type<T>> extends BaseHandlerRegister<
+  T,
+  TypeT
+> {
   constructor(private readonly moduleRef: ModuleRef) {
     super();
   }
