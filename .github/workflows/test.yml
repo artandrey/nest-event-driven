@@ -26,5 +26,7 @@ jobs:
       - name: Install NestJS package wide
         run: |
           pnpm --filter "./packages/*" add -D @nestjs/common@${{ matrix.nest-version }} @nestjs/core@${{ matrix.nest-version }} @nestjs/testing@${{ matrix.nest-version }} reflect-metadata@${{ matrix.reflect-metadata-version }}
-      - name: Test
+      - name: E2E Test
         run: pnpm run test:e2e
+      - name: Test
+        run: pnpm run test
