@@ -9,6 +9,7 @@
   "scripts": {
     "start:dev": "tsc --watch",
     "test:dev": "vitest",
+    "test:e2e:dev": "vitest --config ./vitest.config.e2e.mts --watch",
     "test": "vitest run",
     "lint": "eslint --fix",
     "format": "prettier --write .",
