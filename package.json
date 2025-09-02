@@ -40,7 +40,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.28.1",
     "@eslint/js": "^9.32.0",
-    "@nx/rollup": "^21.3.11",
+    "@nx/rollup": "^21.4.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^22.15.3",
     "eslint": "^9.32.0",
