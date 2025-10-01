@@ -76,8 +76,8 @@ importers:
   packages/core:
     dependencies:
       '@event-driven-architecture/core':
-        specifier: ^0.5.0
-        version: 0.5.0
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@nestjs/common':
         specifier: 11.1.2
@@ -1074,8 +1074,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@event-driven-architecture/core@0.5.0':
-    resolution: {integrity: sha512-1t9eyohM05hLaTPhgKEsTc6GfaYSEkCpEPasS0dQvRVOhdytMFvQ4ttwJsvM7oZBh4bnbAjtC+UfJf1EluvRFw==}
+  '@event-driven-architecture/core@1.0.0':
+    resolution: {integrity: sha512-qaPvmFKhJRZUCEnVY+YxXU7Z4PDk5VkuPNZshUi6nO5o8B15tsNsivKZEfpldsyxjEYESSPrHjz/MgHHEkZPZw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -5226,7 +5226,7 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@event-driven-architecture/core@0.5.0': {}
+  '@event-driven-architecture/core@1.0.0': {}
 
   '@humanfs/core@0.19.1': {}
 
