@@ -22,8 +22,8 @@ importers:
         specifier: ^2.29.7
         version: 2.29.7(@types/node@22.15.29)
       '@eslint/js':
-        specifier: ^9.36.0
-        version: 9.36.0
+        specifier: ^9.39.0
+        version: 9.39.0
       '@nx/rollup':
         specifier: ^21.6.2
         version: 21.6.2(@babel/core@7.28.4)(@babel/traverse@7.28.4)(@swc/core@1.11.21)(nx@21.6.2(@swc/core@1.11.21))(typescript@5.9.3)
@@ -1056,6 +1056,10 @@ packages:
 
   '@eslint/js@9.36.0':
     resolution: {integrity: sha512-uhCbYtYynH30iZErszX78U+nR3pJU3RHGQ57NXy5QupD4SBVwDeU8TNBy+MjMngc1UyIW9noKqsRqfjQTBU2dw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.39.0':
+    resolution: {integrity: sha512-BIhe0sW91JGPiaF1mOuPy5v8NflqfjIcDNpC+LbW9f609WVRX1rArrhi6Z2ymvrAry9jw+5POTj4t2t62o8Bmw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.6':
@@ -5166,6 +5170,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@9.36.0': {}
+
+  '@eslint/js@9.39.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 
