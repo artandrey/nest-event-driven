@@ -1,5 +1,12 @@
 # @nestjs-event-driven/core
 
+## 0.3.0
+
+### Minor Changes
+
+- f8451cc: Rename IEventDrivenModuleOptions to EventDrivenModuleOptions
+- 3113048: Migrate to @event-driven-architecture/core 0.5.0. Rename EventHandler decorator to EventsHandler. Introduce metadata-based routing
+
 ## 0.2.0
 
 ### Minor Changes
