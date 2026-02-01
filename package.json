@@ -44,7 +44,7 @@
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "^22.15.3",
     "eslint": "^9.39.2",
-    "globals": "^16.5.0",
+    "globals": "^17.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "nx": "21.6.2",
