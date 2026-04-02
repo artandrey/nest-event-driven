@@ -38,7 +38,7 @@
     "url": "https://github.com/artandrey/nest-event-driven/issues"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.8",
+    "@changesets/cli": "^2.30.0",
     "@eslint/js": "^9.39.3",
     "@nx/rollup": "^22.5.3",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
