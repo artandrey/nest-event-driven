@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@nestjs/common": "11.1.2",
-    "@nestjs/core": "11.1.2",
+    "@nestjs/core": "11.1.24",
     "@nestjs/testing": "11.1.19",
     "reflect-metadata": "0.2.x"
   }
